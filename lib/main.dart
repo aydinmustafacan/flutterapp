@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'services/world_time.dart';
 import 'dart:async';
 
-String my_api_key = "Vi99dT1fPjcNBo7kySFvFFc4oHdOxMSDgPWocWxp";
+String my_api_key = "skvxTUxep5E65T0ZwzEWC3MzvnDAruvN4uNqDeP4";
 String robotsName = "curiosity";
 String sol = "100";
 int page = 1;
@@ -276,6 +276,20 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     int count = lengthOfPage;
 
     print(count);
+    listItems.add(Card(
+        color: Colors.cyan,
+        elevation: 0,
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              TextField(
+                onChanged: (value) => _runFilter(value),
+                decoration: InputDecoration(
+                    labelText: 'Search', suffixIcon: Icon(Icons.search)),
+              ),
+            ],
+          ),
+        )));
 
     listItems.add(Card(
         color: Colors.lightBlue,
@@ -306,21 +320,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 onPressed: mastbutton,
                 child: Text('mast'),
               ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.deepOrangeAccent,
-                ),
-                onPressed: chemcambutton,
-                child: Text('chemcam'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.blue,
-                ),
-                onPressed: mahlibutton,
-                child: Text('mahli'),
-              ),
             ]))));
+
     listItems.add(Card(
         color: Colors.lightBlue,
         elevation: 0,
@@ -338,35 +339,37 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               ),
               TextButton(
                 style: TextButton.styleFrom(
-                  primary: Colors.blue,
+                  primary: Colors.red[800],
                 ),
                 onPressed: mahlibutton,
                 child: Text('mahli'),
               ),
               TextButton(
                 style: TextButton.styleFrom(
-                  primary: Colors.blue,
-                ),
-                onPressed: mardibutton,
-                child: Text('mardi'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.blue,
+                  primary: Colors.deepPurple,
                 ),
                 onPressed: navcambutton,
                 child: Text('navcam'),
               ),
+            ]))));
+    listItems.add(Card(
+        color: Colors.lightBlue,
+        elevation: 0,
+        child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
               TextButton(
                 style: TextButton.styleFrom(
-                  primary: Colors.blue,
+                  primary: Colors.purple,
                 ),
                 onPressed: pancambutton,
                 child: Text('pancam'),
               ),
               TextButton(
                 style: TextButton.styleFrom(
-                  primary: Colors.blue,
+                  primary: Colors.pink,
                 ),
                 onPressed: minitesbutton,
                 child: Text('minites'),
@@ -492,25 +495,25 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           ),
         ),
       );
-      if (i == 25) {
-        listItems.add(Card(
-            color: Colors.purpleAccent,
-            elevation: 3.0,
-            child: Center(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      primary: Colors.blue,
-                    ),
-                    onPressed: nextpagebutton,
-                    child: Text('TextButton--------------------------------'),
-                  ),
-                ]))));
-      }
     }
+
+    listItems.add(Card(
+        color: Colors.purpleAccent,
+        elevation: 3.0,
+        child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+              TextButton(
+                style: TextButton.styleFrom(
+                  primary: Colors.blue,
+                ),
+                onPressed: nextpagebutton,
+                child: Text('Next Page'),
+              ),
+            ]))));
+
     return listItems;
   }
 
@@ -590,6 +593,22 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     print(camera);
   }
 
-//--------------------------------------
+  //----------------------------------------------------------------------------------
 
+  void _runFilter(String enteredKeyword) {
+    String results = "";
+    if (enteredKeyword.isEmpty) {
+      // if the search field is empty or only contains white-space, we'll display all users
+      results = "1000";
+    } else {
+      results = enteredKeyword;
+
+      // we use the toLowerCase() method to make it case-insensitive
+    }
+
+    // Refresh the UI
+    setState(() {
+      sol = results;
+    });
+  }
 }
