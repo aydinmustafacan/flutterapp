@@ -4,129 +4,161 @@ import 'dart:convert';
 import 'services/world_time.dart';
 import 'dart:async';
 
-String my_api_key = "skvxTUxep5E65T0ZwzEWC3MzvnDAruvN4uNqDeP4";
+String my_api_key = "agJlAhrvkT6EqnrOGs7XLRnIidN8r4ctUHOP06rq";
 String robotsName = "curiosity";
 String sol = "100";
 int page = 1;
-String camera = "&camera=mast";
-
-Future<Album> fetchAlbum() async {
-  String adress = "https://api.nasa.gov/mars-photos/api/v1/rovers/" +
-      robotsName +
-      "/photos?sol=" +
-      sol +
-      camera +
-      "&page=" +
-      page.toString() +
-      "&api_key=" +
-      my_api_key;
-  final response = await http.get(Uri.parse(adress));
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return Album.fromJson(jsonDecode(response.body));
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
-  }
-}
+String camera = "&camera=fhaz";
+String earthDate = "2015-09-09";
+bool earthDayModeOn = true;
 
 Future<int> fetchAlbumLength() async {
-  String adress = "https://api.nasa.gov/mars-photos/api/v1/rovers/" +
-      robotsName +
-      "/photos?sol=" +
-      sol +
-      "&camera=" +
-      camera +
-      "&page=" +
-      page.toString() +
-      "&api_key=" +
-      my_api_key;
-  final response = await http.get(Uri.parse(adress));
+  if (earthDayModeOn) {
+    String adress = "https://api.nasa.gov/mars-photos/api/v1/rovers/" +
+        robotsName +
+        "/photos?earth_date=" +
+        earthDate +
+        "&camera=" +
+        camera +
+        "&page=" +
+        page.toString() +
+        "&api_key=" +
+        my_api_key;
+    final response = await http.get(Uri.parse(adress));
 
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    Album f = Album.fromJson(jsonDecode(response.body));
-    return f.photos.length;
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      Album f = Album.fromJson(jsonDecode(response.body));
+      return f.photos.length;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
   } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
-  }
-}
+    String adress = "https://api.nasa.gov/mars-photos/api/v1/rovers/" +
+        robotsName +
+        "/photos?sol=" +
+        sol +
+        "&camera=" +
+        camera +
+        "&page=" +
+        page.toString() +
+        "&api_key=" +
+        my_api_key;
+    final response = await http.get(Uri.parse(adress));
 
-Future<Map> getUrlList2(int i) async {
-  print("robot is" + robotsName);
-
-  String adress = "https://api.nasa.gov/mars-photos/api/v1/rovers/" +
-      robotsName +
-      "/photos?sol=" +
-      sol +
-      "&camera=" +
-      camera +
-      "&page=" +
-      page.toString() +
-      "&api_key=" +
-      my_api_key;
-  final response = await http.get(Uri.parse(adress));
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    Album f = Album.fromJson(jsonDecode(response.body));
-    // print("&&&&&&&&&&&&&&&&&&&--------------------------");
-    Map tmp = f.photos[0];
-    print(tmp);
-
-    return f.photos[i];
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      Album f = Album.fromJson(jsonDecode(response.body));
+      return f.photos.length;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
   }
 }
 
 Future<List> getUrlList() async {
-  String adress = "https://api.nasa.gov/mars-photos/api/v1/rovers/" +
-      robotsName +
-      "/photos?sol=" +
-      sol +
-      "&camera=" +
-      camera +
-      "&page=" +
-      page.toString() +
-      "&api_key=" +
-      my_api_key;
-  final response = await http.get(Uri.parse(adress));
+  print("robot is " + robotsName);
+  if (earthDayModeOn) {
+    String adress = "https://api.nasa.gov/mars-photos/api/v1/rovers/" +
+        robotsName +
+        "/photos?earth_date=" +
+        earthDate +
+        "&camera=" +
+        camera +
+        "&page=" +
+        page.toString() +
+        "&api_key=" +
+        my_api_key;
+    final response = await http.get(Uri.parse(adress));
 
-  if (response.statusCode == 200) {
-    Album f = Album.fromJson(jsonDecode(response.body));
-    return f.photos;
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      Album f = Album.fromJson(jsonDecode(response.body));
+      // print("&&&&&&&&&&&&&&&&&&&--------------------------");
+
+      //print(tmp);
+
+      return f.photos;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
   } else {
-    throw Exception('Failed to load album');
+    String adress = "https://api.nasa.gov/mars-photos/api/v1/rovers/" +
+        robotsName +
+        "/photos?sol=" +
+        sol +
+        "&camera=" +
+        camera +
+        "&page=" +
+        page.toString() +
+        "&api_key=" +
+        my_api_key;
+    final response = await http.get(Uri.parse(adress));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      Album f = Album.fromJson(jsonDecode(response.body));
+      // print("&&&&&&&&&&&&&&&&&&&--------------------------");
+
+      //print(tmp);
+
+      return f.photos;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
   }
 }
 
+// Future<Map> getUrlList2(int i) async {
+//   print("robot is " + robotsName);
+//   String adress = "https://api.nasa.gov/mars-photos/api/v1/rovers/" +
+//       robotsName +
+//       "/photos?sol=" +
+//       sol +
+//       "&camera=" +
+//       camera +
+//       "&page=" +
+//       page.toString() +
+//       "&api_key=" +
+//       my_api_key;
+//   final response = await http.get(Uri.parse(adress));
+
+//   if (response.statusCode == 200) {
+//     // If the server did return a 200 OK response,
+//     // then parse the JSON.
+//     Album f = Album.fromJson(jsonDecode(response.body));
+//     // print("&&&&&&&&&&&&&&&&&&&--------------------------");
+//     Map tmp = f.photos[0];
+//     //print(tmp);
+
+//     return f.photos[i];
+//   } else {
+//     // If the server did not return a 200 OK response,
+//     // then throw an exception.
+//     throw Exception('Failed to load album');
+//   }
+// }
+
 class Album {
   final List photos;
-  final String url1;
-
-  final String title;
-
   Album({
     required this.photos,
-    required this.url1,
-    required this.title,
   });
-
   factory Album.fromJson(Map<String, dynamic> json) {
     return Album(
       photos: json['photos'],
-      url1: json['photos'][0]['img_src'],
-      title: json['photos'][0]['camera']['full_name'],
     );
   }
 }
@@ -158,38 +190,35 @@ class MyStatefulWidget extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  late Future<Album> futureAlbum;
   int lengthOfPage = 0;
+  List my_list = [];
+  List<String> url_List_of_this_page = [];
+  List<String> dates_of_images = [];
+  List<String> Names_of_cameras_of_images = [];
 
   @override
   void initState() {
     super.initState();
-    futureAlbum = fetchAlbum();
 
     fetchAlbumLength().then((int result) {
       setState(() {
         lengthOfPage = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
       });
     });
   }
 
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -204,7 +233,15 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           lengthOfPage = result;
         });
       });
-      print(lengthOfPage);
+      getUrlList().then((List result) {
+        setState(() {
+          my_list = result;
+          url_List_of_this_page = [];
+          dates_of_images = [];
+          Names_of_cameras_of_images = [];
+        });
+      });
+      print("length: " + lengthOfPage.toString());
     } else if (_selectedIndex == 1) {
       setState(() {
         robotsName = 'opportunity';
@@ -215,7 +252,15 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           lengthOfPage = result;
         });
       });
-      print(lengthOfPage);
+      getUrlList().then((List result) {
+        setState(() {
+          my_list = result;
+          url_List_of_this_page = [];
+          dates_of_images = [];
+          Names_of_cameras_of_images = [];
+        });
+      });
+      print("length: " + lengthOfPage.toString());
     } else if (_selectedIndex == 2) {
       setState(() {
         robotsName = 'spirit';
@@ -225,7 +270,15 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           lengthOfPage = result;
         });
       });
-      print(lengthOfPage);
+      getUrlList().then((List result) {
+        setState(() {
+          my_list = result;
+          url_List_of_this_page = [];
+          dates_of_images = [];
+          Names_of_cameras_of_images = [];
+        });
+      });
+      print("length: " + lengthOfPage.toString());
     }
   }
 
@@ -236,11 +289,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         title: const Text('Mustafa Can Aydin\'s flutter app'),
       ),
       body: GridView.custom(
-        //childAspectRatio: 9/16,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          mainAxisSpacing: 15.0,
-          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 1.0,
+          crossAxisSpacing: 1.0,
         ),
         childrenDelegate: SliverChildListDelegate(_buildItems()),
       ),
@@ -268,228 +320,354 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   List<Widget> _buildItems() {
     List<Widget> listItems = [];
-    // fetchAlbumLength().then((int result) {
-    //   setState(() {
-    //     lengthOfPage = result;
-    //   });
-    // });
-    int count = lengthOfPage;
+    int count = 0;
+    setState(() {
+      count = lengthOfPage;
+    });
+    count = lengthOfPage;
 
-    print(count);
-    listItems.add(Card(
-        color: Colors.cyan,
-        elevation: 0,
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              TextField(
-                onChanged: (value) => _runFilter(value),
-                decoration: InputDecoration(
-                    labelText: 'Search', suffixIcon: Icon(Icons.search)),
-              ),
-            ],
-          ),
-        )));
+    print("count is " + count.toString());
+    if (earthDayModeOn) {
+      listItems.add(Card(
+          margin: EdgeInsets.all(1.0),
+          color: Colors.cyan[50],
+          elevation: 0,
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  onChanged: (value) => _runFilterEarthDate(value),
+                  decoration: InputDecoration(
+                      labelText: 'Enter earth date in international format: ',
+                      suffixIcon: Icon(Icons.search_rounded)),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    primary: Colors.cyan[800],
+                  ),
+                  onPressed: changeToSolButton,
+                  child: Text('Change to sol '),
+                ),
+              ],
+            ),
+          )));
+    } else {
+      listItems.add(Card(
+          margin: EdgeInsets.all(1.0),
+          color: Colors.cyan,
+          elevation: 0,
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  onChanged: (value) => _runFilter(value),
+                  decoration: InputDecoration(
+                      labelText: 'Enter sol value: ',
+                      suffixIcon: Icon(Icons.search)),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    primary: Colors.yellowAccent,
+                  ),
+                  onPressed: changeToEarthDateButton,
+                  child: Text('Change to earth date format'),
+                ),
+              ],
+            ),
+          )));
+    }
 
-    listItems.add(Card(
-        color: Colors.lightBlue,
-        elevation: 0,
-        child: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.deepOrange,
+    if (robotsName == "curiosity") {
+      listItems.add(Card(
+          margin: EdgeInsets.all(1.0),
+          color: Colors.lightBlue,
+          elevation: 0,
+          child: Center(
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.purple[900]),
+                        side: MaterialStateProperty.all(
+                            BorderSide(width: 1, color: Colors.red)),
+                      ),
+                      onPressed: fhazbutton,
+                      child: Text('fhaz'),
+                    ),
+                    TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.blueGrey[900]),
+                        side: MaterialStateProperty.all(
+                            BorderSide(width: 1, color: Colors.red)),
+                      ),
+                      onPressed: rhazbutton,
+                      child: Text('rhaz'),
+                    ),
+                  ],
                 ),
-                onPressed: fhazbutton,
-                child: Text('fhaz'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.redAccent,
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.pink[900]),
+                        side: MaterialStateProperty.all(
+                            BorderSide(width: 1, color: Colors.red)),
+                      ),
+                      onPressed: mastbutton,
+                      child: Text('mast'),
+                    ),
+                    TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.purple[600]),
+                        side: MaterialStateProperty.all(
+                            BorderSide(width: 1, color: Colors.red)),
+                      ),
+                      onPressed: chemcambutton,
+                      child: Text('chemcam'),
+                    ),
+                  ],
                 ),
-                onPressed: rhazbutton,
-                child: Text('rhaz'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.red,
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.yellowAccent),
+                        side: MaterialStateProperty.all(
+                            BorderSide(width: 1, color: Colors.red)),
+                      ),
+                      onPressed: mahlibutton,
+                      child: Text(
+                        'mahli',
+                      ),
+                    ),
+                    TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.cyan[900]),
+                        side: MaterialStateProperty.all(
+                            BorderSide(width: 1, color: Colors.red)),
+                      ),
+                      onPressed: mardibutton,
+                      child: Text(
+                        'mardi',
+                      ),
+                    ),
+                  ],
                 ),
-                onPressed: mastbutton,
-                child: Text('mast'),
-              ),
-            ]))));
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.amber[900]),
+                        side: MaterialStateProperty.all(
+                            BorderSide(width: 1, color: Colors.red)),
+                      ),
+                      onPressed: navcambutton,
+                      child: Text(
+                        'navcam',
+                      ),
+                    ),
+                  ],
+                ),
+              ]))));
+    } else {
+      listItems.add(Card(
+          margin: EdgeInsets.all(1.0),
+          color: Colors.lightBlue,
+          elevation: 0,
+          child: Center(
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.purple[900]),
+                        side: MaterialStateProperty.all(
+                            BorderSide(width: 1, color: Colors.red)),
+                      ),
+                      onPressed: fhazbutton,
+                      child: Text('fhaz'),
+                    ),
+                    TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.blue[900]),
+                        side: MaterialStateProperty.all(
+                            BorderSide(width: 1, color: Colors.red)),
+                      ),
+                      onPressed: rhazbutton,
+                      child: Text('rhaz'),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.yellow[900]),
+                        side: MaterialStateProperty.all(
+                            BorderSide(width: 1, color: Colors.red)),
+                      ),
+                      onPressed: navcambutton,
+                      child: Text('navcam'),
+                    ),
+                    TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.red[900]),
+                        side: MaterialStateProperty.all(
+                            BorderSide(width: 1, color: Colors.red)),
+                      ),
+                      onPressed: pancambutton,
+                      child: Text('pancam'),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.green[900]),
+                        side: MaterialStateProperty.all(
+                            BorderSide(width: 1, color: Colors.red)),
+                      ),
+                      onPressed: minitesbutton,
+                      child: Text(
+                        'minites',
+                      ),
+                    ),
+                  ],
+                ),
+              ]))));
+    }
 
-    listItems.add(Card(
-        color: Colors.lightBlue,
-        elevation: 0,
-        child: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.deepOrangeAccent,
-                ),
-                onPressed: chemcambutton,
-                child: Text('chemcam'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.red[800],
-                ),
-                onPressed: mahlibutton,
-                child: Text('mahli'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.deepPurple,
-                ),
-                onPressed: navcambutton,
-                child: Text('navcam'),
-              ),
-            ]))));
-    listItems.add(Card(
-        color: Colors.lightBlue,
-        elevation: 0,
-        child: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.purple,
-                ),
-                onPressed: pancambutton,
-                child: Text('pancam'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.pink,
-                ),
-                onPressed: minitesbutton,
-                child: Text('minites'),
-              ),
-            ]))));
+    // for (int i = 0; i < count; i++) {
+    //   listItems.add(
+    //     Card(
+    //       margin: EdgeInsets.all(1.0),
+    //       color: Colors.amber[50],
+    //       elevation: 0,
+    //       child: Center(
+    //         child: Column(
+    //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    //           crossAxisAlignment: CrossAxisAlignment.center,
+    //           children: <Widget>[
+    //             FutureBuilder<Map>(
+    //               future: getUrlList2(i),
+    //               builder: (context, snapshot) {
+    //                 if (snapshot.hasData) {
+    //                   // print("here---------------------------->>>>>>>>>>>");
+    //                   // print(snapshot.data!);
+    //                   // print((snapshot.data!)['earth_date']);
+
+    //                   return Center(
+    //                     child: Column(
+    //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                       children: [
+    //                         Center(
+    //                             child: Text("Date taken: " +
+    //                                 snapshot.data!['earth_date'])),
+    //                         Center(
+    //                             child: Text(
+    //                                 snapshot.data!['camera']['full_name'])),
+    //                         SizedBox(
+    //                             width: 140,
+    //                             child: Image.network(
+    //                                 (snapshot.data!)['img_src'],
+    //                                 fit: BoxFit.fitWidth)),
+    //                       ],
+    //                     ),
+    //                   );
+    //                 } else if (snapshot.hasError) {
+    //                   return Text("hey   ${snapshot.error}");
+    //                 }
+    //                 // By default, show a loading spinner.
+    //                 return CircularProgressIndicator();
+    //               },
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //   );
+    // }
+
+    url_List_of_this_page = [];
+    dates_of_images = [];
+    Names_of_cameras_of_images = [];
+    setState(() {
+      for (int i = 0; i < my_list.length; i++) {
+        var temp = my_list[i];
+
+        Map myTempMap = temp;
+        //String imgUrl = myTempMap['img_url'];
+        // print("VERY IMPORTANT ::: :::: ::: ::: ");
+        // print(myTempMap['img_src']);
+        url_List_of_this_page.add(myTempMap['img_src']);
+        Names_of_cameras_of_images.add(myTempMap['camera']['full_name']);
+        dates_of_images.add(myTempMap['earth_date']);
+      }
+    });
 
     for (int i = 0; i < count; i++) {
       listItems.add(
         Card(
-          color: Colors.amber,
-          elevation: 5.0,
+          margin: EdgeInsets.all(1.0),
+          color: Colors.amber[50],
+          elevation: 0,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                // FutureBuilder<Album>(
-                //   future: futureAlbum,
-                //   builder: (context, snapshot) {
-
-                //     if (snapshot.hasData) {
-                //       return  Expanded(
-                //      child: SizedBox(
-                //          width: 300,
-                //          child: Image.network(snapshot.data!.url1, fit: BoxFit.fitWidth)));
-                //     } else if (snapshot.hasError) {
-                //       return Text("${snapshot.error}");
-                //     }
-                //     // By default, show a loading spinner.
-                //     return CircularProgressIndicator();
-                //   },
-                // ),
-                FutureBuilder<Map>(
-                  future: getUrlList2(i),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      print("here---------------------------->>>>>>>>>>>");
-                      print(snapshot.data!);
-                      print((snapshot.data!)['earth_date']);
-                      return Center(
-                        child: Text(snapshot.data!['earth_date']),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text("hey   ${snapshot.error}");
-                    }
-                    // By default, show a loading spinner.
-                    return CircularProgressIndicator();
-                  },
-                ),
-                FutureBuilder<Map>(
-                  future: getUrlList2(i),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      print("here---------------------------->>>>>>>>>>>");
-                      print(snapshot.data!);
-                      print((snapshot.data!)['img_src']);
-                      return Expanded(
-                          child: SizedBox(
-                              width: 300,
-                              child: Image.network((snapshot.data!)['img_src'],
-                                  fit: BoxFit.fitWidth)));
-                    } else if (snapshot.hasError) {
-                      return Text("hey   ${snapshot.error}");
-                    }
-                    // By default, show a loading spinner.
-                    return CircularProgressIndicator();
-                  },
-                ),
-                FutureBuilder<Map>(
-                  future: getUrlList2(i),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      print("here---------------------------->>>>>>>>>>>");
-                      print(snapshot.data!);
-                      print((snapshot.data!)['earth_date']);
-                      return Center(
-                        child: Text(snapshot.data!['camera']['full_name']),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text("hey   ${snapshot.error}");
-                    }
-                    // By default, show a loading spinner.
-                    return CircularProgressIndicator();
-                  },
-                ),
-
-                //             FutureBuilder<List<dynamic>>(
-                //   future: getUrlList(),
-                //   builder: (context, snapshot) {
-                //     print(snapshot.data![i]);
-                //     print(snapshot.data!.length);
-                //     return ListView.builder(
-
-                //       itemCount: snapshot.data!.length,
-                //       itemBuilder: (context, index) {
-                //         return Text("snapshot.data![i]"
-
-                //           // child: Column(
-                //           //   children: <Widget>[
-                //           //     ElevatedButton(
-                //           //       onPressed: () async {
-                //           //         print((snapshot.data![index]));
-                //           //       },
-                //           //       child: Text('Get Data'),
-                //           //     ),
-                //           //   ],
-                //           // ),
-                //         );
-                //       },
-                //     );
-                //   },
-                // )
-                // Expanded(
-                //     child: SizedBox(
-                //         width: 300,
-                //         child: Image.network(
-                //           _urls[i %
-                //               8], // will be i%25 since each page includes 25 images
-                //           fit: BoxFit.fitWidth,
-                //         )))
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Date taken: " + dates_of_images[i]),
+                      SizedBox(
+                        width: 140,
+                        child: Image.network(
+                          url_List_of_this_page[i],
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
+                      Text("By " + Names_of_cameras_of_images[i]),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
@@ -498,22 +676,29 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     }
 
     listItems.add(Card(
-        color: Colors.purpleAccent,
+        margin: EdgeInsets.all(1.0),
+        color: Colors.purple[50],
         elevation: 3.0,
         child: Center(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.blue,
-                ),
+              TextButton.icon(
+                icon: Icon(Icons.next_plan),
+                label: Text('Next Page'),
                 onPressed: nextpagebutton,
-                child: Text('Next Page'),
-              ),
+                style: ButtonStyle(
+                    side: MaterialStateProperty.all(
+                        BorderSide(width: 5, color: Colors.purple)),
+                    foregroundColor:
+                        MaterialStateProperty.all(Colors.purple[900]),
+                    padding: MaterialStateProperty.all(
+                        EdgeInsets.symmetric(vertical: 8, horizontal: 30)),
+                    textStyle:
+                        MaterialStateProperty.all(TextStyle(fontSize: 18))),
+              )
             ]))));
-
     return listItems;
   }
 
@@ -521,25 +706,149 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     setState(() {
       page++;
     });
+    fetchAlbumLength().then((int result) {
+      setState(() {
+        lengthOfPage = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
 
     print(page);
+  }
+
+  void changeToEarthDateButton() {
+    setState(() {
+      earthDayModeOn = true;
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    fetchAlbumLength().then((int result) {
+      setState(() {
+        lengthOfPage = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+
+    print(earthDayModeOn);
+  }
+
+  void changeToSolButton() {
+    setState(() {
+      earthDayModeOn = false;
+    });
+    fetchAlbumLength().then((int result) {
+      setState(() {
+        lengthOfPage = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+
+    print(earthDayModeOn);
   }
 
   void fhazbutton() {
     setState(() {
       camera = "&camera=fhaz";
     });
+    fetchAlbumLength().then((int result) {
+      setState(() {
+        lengthOfPage = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+
+    print(camera);
   }
 
   void rhazbutton() {
     setState(() {
       camera = "&camera=rhaz";
     });
+    fetchAlbumLength().then((int result) {
+      setState(() {
+        lengthOfPage = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+
+    print(camera);
   }
 
   void mastbutton() {
     setState(() {
       camera = "&camera=mast";
+    });
+    fetchAlbumLength().then((int result) {
+      setState(() {
+        lengthOfPage = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
     });
 
     print(camera);
@@ -549,6 +858,22 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     setState(() {
       camera = "&camera=chemcam";
     });
+    fetchAlbumLength().then((int result) {
+      setState(() {
+        lengthOfPage = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
 
     print(camera);
   }
@@ -556,6 +881,22 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   void mahlibutton() {
     setState(() {
       camera = "&camera=mahli";
+    });
+    fetchAlbumLength().then((int result) {
+      setState(() {
+        lengthOfPage = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
     });
 
     print(camera);
@@ -565,6 +906,22 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     setState(() {
       camera = "&camera=mardi";
     });
+    fetchAlbumLength().then((int result) {
+      setState(() {
+        lengthOfPage = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
 
     print(camera);
   }
@@ -573,13 +930,45 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     setState(() {
       camera = "&camera=pancam";
     });
+    fetchAlbumLength().then((int result) {
+      setState(() {
+        lengthOfPage = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
 
     print(camera);
   }
 
   void navcambutton() {
     setState(() {
-      camera = "&camera=nevcam";
+      camera = "&camera=navcam";
+    });
+    fetchAlbumLength().then((int result) {
+      setState(() {
+        lengthOfPage = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
     });
 
     print(camera);
@@ -588,6 +977,22 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   void minitesbutton() {
     setState(() {
       camera = "&camera=minites";
+    });
+    fetchAlbumLength().then((int result) {
+      setState(() {
+        lengthOfPage = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
     });
 
     print(camera);
@@ -609,6 +1014,63 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     // Refresh the UI
     setState(() {
       sol = results;
+    });
+    fetchAlbumLength().then((int result) {
+      setState(() {
+        lengthOfPage = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+  }
+
+  void _runFilterEarthDate(String enteredKeyword) {
+    String results = "";
+    if (enteredKeyword.isEmpty) {
+      // if the search field is empty or only contains white-space, we'll display all users
+      results = "2015-09-09";
+    } else {
+      results = enteredKeyword;
+
+      // we use the toLowerCase() method to make it case-insensitive
+    }
+
+    // Refresh the UI
+    setState(() {
+      earthDate = results;
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    fetchAlbumLength().then((int result) {
+      setState(() {
+        lengthOfPage = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
     });
   }
 }
