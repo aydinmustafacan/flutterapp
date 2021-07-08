@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'services/world_time.dart';
 import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 
 String my_api_key = "agJlAhrvkT6EqnrOGs7XLRnIidN8r4ctUHOP06rq";
 String robotsName = "curiosity";
@@ -195,6 +196,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   List<String> url_List_of_this_page = [];
   List<String> dates_of_images = [];
   List<String> Names_of_cameras_of_images = [];
+  late final AudioCache _audioCache;
 
   @override
   void initState() {
@@ -206,6 +208,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         url_List_of_this_page = [];
         dates_of_images = [];
         Names_of_cameras_of_images = [];
+        _audioCache = AudioCache(
+          prefix: 'assets/audio/',
+          fixedPlayer: AudioPlayer()..setReleaseMode(ReleaseMode.STOP),
+        );
       });
     });
     getUrlList().then((List result) {
@@ -221,6 +227,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
+    _audioCache.play('Switch.mp3');
     setState(() {
       _selectedIndex = index;
     });
@@ -341,13 +348,22 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                       labelText: 'Enter earth date in international format: ',
                       suffixIcon: Icon(Icons.search_rounded)),
                 ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    primary: Colors.cyan[800],
+                TextButton.icon(
+                  icon: Icon(Icons.change_circle),
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.amber[50]),
+                    foregroundColor:
+                        MaterialStateProperty.all(Colors.cyan[900]),
+                    side: MaterialStateProperty.all(
+                        BorderSide(width: 1, color: Colors.red)),
+                    padding: MaterialStateProperty.all(
+                        EdgeInsets.symmetric(vertical: 1, horizontal: 7)),
                   ),
                   onPressed: changeToSolButton,
-                  child: Text('Change to sol '),
+                  label: Text('Change to sol '),
                 ),
+                Text(" Pictures of Mars can be searched by mars day aka sol")
               ],
             ),
           )));
@@ -365,13 +381,21 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                       labelText: 'Enter sol value: ',
                       suffixIcon: Icon(Icons.search)),
                 ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    primary: Colors.yellowAccent,
+                TextButton.icon(
+                  icon: Icon(Icons.change_circle_outlined),
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.green[200]),
+                    foregroundColor: MaterialStateProperty.all(Colors.black),
+                    side: MaterialStateProperty.all(
+                        BorderSide(width: 1, color: Colors.red)),
+                    padding: MaterialStateProperty.all(
+                        EdgeInsets.symmetric(vertical: 1, horizontal: 2)),
                   ),
                   onPressed: changeToEarthDateButton,
-                  child: Text('Change to earth date format'),
+                  label: Text('Change to earth date'),
                 ),
+                Text("Pictures of Mars can be searched by earth date ")
               ],
             ),
           )));
@@ -392,25 +416,37 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    TextButton(
+                    TextButton.icon(
+                      icon: Icon(Icons.cameraswitch),
                       style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.cyan[50]),
                         foregroundColor:
                             MaterialStateProperty.all(Colors.purple[900]),
                         side: MaterialStateProperty.all(
                             BorderSide(width: 1, color: Colors.red)),
                       ),
-                      onPressed: fhazbutton,
-                      child: Text('fhaz'),
+                      onPressed: () {
+                        _audioCache.play('my_audio.mp3');
+                        fhazbutton();
+                      },
+                      label: Text('fhaz'),
                     ),
-                    TextButton(
+                    TextButton.icon(
+                      icon: Icon(Icons.camera),
                       style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.blueGrey[100]),
                         foregroundColor:
                             MaterialStateProperty.all(Colors.blueGrey[900]),
                         side: MaterialStateProperty.all(
                             BorderSide(width: 1, color: Colors.red)),
                       ),
-                      onPressed: rhazbutton,
-                      child: Text('rhaz'),
+                      onPressed: () {
+                        _audioCache.play('my_audio.mp3');
+                        rhazbutton();
+                      },
+                      label: Text('rhaz'),
                     ),
                   ],
                 ),
@@ -418,25 +454,41 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    TextButton(
+                    TextButton.icon(
+                      icon: Icon(Icons.camera_outlined),
                       style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.purple[100]),
                         foregroundColor:
                             MaterialStateProperty.all(Colors.pink[900]),
                         side: MaterialStateProperty.all(
                             BorderSide(width: 1, color: Colors.red)),
+                        padding: MaterialStateProperty.all(
+                            EdgeInsets.symmetric(vertical: 1, horizontal: 3)),
                       ),
-                      onPressed: mastbutton,
-                      child: Text('mast'),
+                      onPressed: () {
+                        _audioCache.play('my_audio.mp3');
+                        mastbutton();
+                      },
+                      label: Text('mast'),
                     ),
-                    TextButton(
+                    TextButton.icon(
+                      icon: Icon(Icons.camera_alt_outlined),
                       style: ButtonStyle(
                         foregroundColor:
                             MaterialStateProperty.all(Colors.purple[600]),
                         side: MaterialStateProperty.all(
                             BorderSide(width: 1, color: Colors.red)),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.amber[50]),
+                        padding: MaterialStateProperty.all(
+                            EdgeInsets.symmetric(vertical: 1, horizontal: 3)),
                       ),
-                      onPressed: chemcambutton,
-                      child: Text('chemcam'),
+                      onPressed: () {
+                        _audioCache.play('my_audio.mp3');
+                        chemcambutton();
+                      },
+                      label: Text('chemcam'),
                     ),
                   ],
                 ),
@@ -444,27 +496,43 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    TextButton(
+                    TextButton.icon(
+                      icon: Icon(Icons.camera_alt),
                       style: ButtonStyle(
                         foregroundColor:
-                            MaterialStateProperty.all(Colors.yellowAccent),
+                            MaterialStateProperty.all(Colors.yellow[900]),
                         side: MaterialStateProperty.all(
                             BorderSide(width: 1, color: Colors.red)),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.amber[50]),
+                        padding: MaterialStateProperty.all(
+                            EdgeInsets.symmetric(vertical: 1, horizontal: 7)),
                       ),
-                      onPressed: mahlibutton,
-                      child: Text(
+                      onPressed: () {
+                        _audioCache.play('my_audio.mp3');
+                        mahlibutton();
+                      },
+                      label: Text(
                         'mahli',
                       ),
                     ),
-                    TextButton(
+                    TextButton.icon(
                       style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.amber[50]),
                         foregroundColor:
                             MaterialStateProperty.all(Colors.cyan[900]),
                         side: MaterialStateProperty.all(
                             BorderSide(width: 1, color: Colors.red)),
+                        padding: MaterialStateProperty.all(
+                            EdgeInsets.symmetric(vertical: 1, horizontal: 7)),
                       ),
-                      onPressed: mardibutton,
-                      child: Text(
+                      onPressed: () {
+                        _audioCache.play('my_audio.mp3');
+                        mardibutton();
+                      },
+                      icon: Icon(Icons.camera_alt),
+                      label: Text(
                         'mardi',
                       ),
                     ),
@@ -474,15 +542,21 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    TextButton(
+                    TextButton.icon(
+                      icon: Icon(Icons.linked_camera),
                       style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.green[50]),
                         foregroundColor:
                             MaterialStateProperty.all(Colors.amber[900]),
                         side: MaterialStateProperty.all(
                             BorderSide(width: 1, color: Colors.red)),
                       ),
-                      onPressed: navcambutton,
-                      child: Text(
+                      onPressed: () {
+                        _audioCache.play('my_audio.mp3');
+                        navcambutton();
+                      },
+                      label: Text(
                         'navcam',
                       ),
                     ),
@@ -504,25 +578,37 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    TextButton(
+                    TextButton.icon(
+                      icon: Icon(Icons.cameraswitch_outlined),
                       style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.blue[100]),
                         foregroundColor:
                             MaterialStateProperty.all(Colors.purple[900]),
                         side: MaterialStateProperty.all(
                             BorderSide(width: 1, color: Colors.red)),
                       ),
-                      onPressed: fhazbutton,
-                      child: Text('fhaz'),
+                      onPressed: () {
+                        _audioCache.play('my_audio.mp3');
+                        fhazbutton();
+                      },
+                      label: Text('fhaz'),
                     ),
-                    TextButton(
+                    TextButton.icon(
+                      icon: Icon(Icons.photo_camera),
                       style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.yellow[100]),
                         foregroundColor:
                             MaterialStateProperty.all(Colors.blue[900]),
                         side: MaterialStateProperty.all(
                             BorderSide(width: 1, color: Colors.red)),
                       ),
-                      onPressed: rhazbutton,
-                      child: Text('rhaz'),
+                      onPressed: () {
+                        _audioCache.play('my_audio.mp3');
+                        rhazbutton();
+                      },
+                      label: Text('rhaz'),
                     ),
                   ],
                 ),
@@ -530,42 +616,67 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    TextButton(
+                    TextButton.icon(
+                      icon: Icon(Icons.flip_camera_ios),
                       style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.grey[100]),
                         foregroundColor:
                             MaterialStateProperty.all(Colors.yellow[900]),
                         side: MaterialStateProperty.all(
                             BorderSide(width: 1, color: Colors.red)),
+                        padding: MaterialStateProperty.all(
+                            EdgeInsets.symmetric(vertical: 1, horizontal: 3)),
                       ),
-                      onPressed: navcambutton,
-                      child: Text('navcam'),
+                      onPressed: () {
+                        _audioCache.play('my_audio.mp3');
+                        navcambutton();
+                      },
+                      label: Text('navcam'),
                     ),
-                    TextButton(
+                    TextButton.icon(
+                      icon: Icon(Icons.control_camera_sharp),
                       style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.purple[100]),
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.red[900]),
+                        side: MaterialStateProperty.all(
+                            BorderSide(width: 1, color: Colors.red)),
+                        padding: MaterialStateProperty.all(
+                            EdgeInsets.symmetric(vertical: 1, horizontal: 3)),
+                      ),
+                      onPressed: () {
+                        _audioCache.play('my_audio.mp3');
+                        pancambutton();
+                      },
+                      label: Text('pancam'),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton.icon(
+                      icon: Icon(Icons.camera_enhance_sharp),
+                      onPressed: () {
+                        _audioCache.play('my_audio.mp3');
+                        minitesbutton();
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.red[100]),
                         foregroundColor:
                             MaterialStateProperty.all(Colors.red[900]),
                         side: MaterialStateProperty.all(
                             BorderSide(width: 1, color: Colors.red)),
                       ),
-                      onPressed: pancambutton,
-                      child: Text('pancam'),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                      style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all(Colors.green[900]),
-                        side: MaterialStateProperty.all(
-                            BorderSide(width: 1, color: Colors.red)),
-                      ),
-                      onPressed: minitesbutton,
-                      child: Text(
+                      label: Text(
                         'minites',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ],
@@ -675,6 +786,34 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       );
     }
 
+    if (page > 1) {
+      listItems.add(Card(
+          margin: EdgeInsets.all(1.0),
+          color: Colors.purple[50],
+          elevation: 3.0,
+          child: Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                TextButton.icon(
+                  icon: Icon(Icons.keyboard_return_sharp),
+                  label: Text('Previous Page'),
+                  onPressed: prevpagebutton,
+                  style: ButtonStyle(
+                      side: MaterialStateProperty.all(
+                          BorderSide(width: 5, color: Colors.pink)),
+                      foregroundColor:
+                          MaterialStateProperty.all(Colors.pink[900]),
+                      padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(vertical: 4, horizontal: 10)),
+                      textStyle:
+                          MaterialStateProperty.all(TextStyle(fontSize: 18))),
+                ),
+                Text("Previous Page: " + (page - 1).toString())
+              ]))));
+    }
+
     listItems.add(Card(
         margin: EdgeInsets.all(1.0),
         color: Colors.purple[50],
@@ -697,9 +836,34 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                         EdgeInsets.symmetric(vertical: 8, horizontal: 30)),
                     textStyle:
                         MaterialStateProperty.all(TextStyle(fontSize: 18))),
-              )
+              ),
+              Text("Current Page: " + page.toString())
             ]))));
     return listItems;
+  }
+
+  void prevpagebutton() {
+    setState(() {
+      page--;
+    });
+    fetchAlbumLength().then((int result) {
+      setState(() {
+        lengthOfPage = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+    getUrlList().then((List result) {
+      setState(() {
+        my_list = result;
+        url_List_of_this_page = [];
+        dates_of_images = [];
+        Names_of_cameras_of_images = [];
+      });
+    });
+
+    print(page);
   }
 
   void nextpagebutton() {
